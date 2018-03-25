@@ -63,10 +63,17 @@ namespace Realty
                 {
                     xmlDoc.LoadXml(xmlString);
                     XmlNode node;
-                    node = xmlDoc.SelectSingleNode(".//suggestions/data/city");
-                    city = node.InnerText;
+                    node = xmlDoc.SelectSingleNode(".//suggestions/data/city_with_type");
+                    if (node != null)
+                    {
+                        if (node.InnerText == "")
+                        {
+                            node = xmlDoc.SelectSingleNode(".//suggestions/data/settlement_with_type");
+                            if (node != null) { city = node.InnerText; }
+                        }
+                    }
                     node = xmlDoc.SelectSingleNode(".//suggestions/data/street");
-                    street = node.InnerText;
+                    if (node != null) { street = node.InnerText; }
                 }
             }
         }
