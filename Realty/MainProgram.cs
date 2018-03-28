@@ -7,11 +7,15 @@ namespace Realty
         static int Main(string[] args)
         {
             AddrSuggestion addrSuggestion = new AddrSuggestion(Const.Token, Const.Url);
-            addrSuggestion.GetAddrSuggestion("Московская область, Ленинский район, д. Калиновка, 57А");
+            addrSuggestion.GetAddrSuggestion("г. Ступино, тургенева", 1);
             Console.WriteLine(addrSuggestion.City);
             Console.WriteLine(addrSuggestion.Street);
-            Console.ReadKey();          
 
+            var c = new Cian("https://github.com/AngleSharp/AngleSharp/wiki/Documentation");
+            c.Parse();
+
+            Console.ReadKey();          
+            
             return 0;
         }
     }

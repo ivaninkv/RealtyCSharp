@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Realty
+﻿namespace Realty
 {
     /// <summary>
     /// константы для использования в приложении

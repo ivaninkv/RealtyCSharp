@@ -5,7 +5,10 @@ using System.Xml;
 
 namespace Realty
 {
-    internal class AddrSuggestion
+    /// <summary>
+    /// Класс для работы с сервисом dadata.ru
+    /// </summary>
+    public class AddrSuggestion
     {
         private string token;
         private string url;
@@ -13,10 +16,10 @@ namespace Realty
         private string street;
 
         /// <summary>
-        /// конструктор с указанием токена для подключения к dadata
+        /// Конструктор с указанием токена для подключения к dadata
         /// </summary>
         /// <param name="token"></param>
-        internal AddrSuggestion(string token)
+        public AddrSuggestion(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
@@ -27,29 +30,46 @@ namespace Realty
         }
 
         /// <summary>
-        /// конструктор с указанием токена и url для подключения к dadata
+        /// Конструктор с указанием токена и url для подключения к dadata
         /// </summary>
         /// <param name="token"></param>
         /// <param name="url"></param>
-        internal AddrSuggestion(string token, string url) : this(token)
+        public AddrSuggestion(string token, string url) : this(token)
         {
             Url = url;
         }
 
-        internal string Token { get => token; set => token = value; }
-        internal string Url { get => url; set => url = value; }
-        internal string City { get => city; }
-        internal string Street { get => street; }
+        /// <summary>
+        /// Токен для подключения к dadata
+        /// </summary>
+        public string Token { get => token; set => token = value; }
+        /// <summary>
+        /// Url подсказок по адресу
+        /// </summary>
+        public string Url { get => url; set => url = value; }
+        /// <summary>
+        /// Распарсенный город, только для чтения
+        /// </summary>
+        public string City { get => city; }
+        /// <summary>
+        /// Распарсенная улица, только для чтения
+        /// </summary>
+        public string Street { get => street; }
 
-        internal void GetAddrSuggestion(string Addr)
+        /// <summary>
+        /// Получить подсказку по адресу, образец адреса и количество посдсказок
+        /// </summary>
+        /// <param name="Addr"></param>
+        /// <param name="qty"></param>
+        public void GetAddrSuggestion(string Addr, int qty = 1)
         {
-            HttpWebRequest request = HttpWebRequest.CreateHttp(Url);
+            HttpWebRequest request = WebRequest.CreateHttp(Url);
             request.Method = "POST";
             request.ContentType = "application/xml";
             request.Accept = "application/xml";            
             request.Headers.Add("Authorization", "Token " + Token);
             StreamWriter sw = new StreamWriter(request.GetRequestStream());
-            string q = String.Format(Const.q, Addr, 1);
+            string q = String.Format(Const.q, Addr, qty);
             sw.Write(q);
             sw.Close();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -60,13 +80,14 @@ namespace Realty
                 StreamReader sr = new StreamReader(response.GetResponseStream());
                 string xmlString = sr.ReadToEnd().Trim();
                 if (xmlString != "")
-                {
+                {                    
                     xmlDoc.LoadXml(xmlString);
                     XmlNode node;
                     node = xmlDoc.SelectSingleNode(".//suggestions/data/city_with_type");
                     if (node != null)
                     {
-                        if (node.InnerText == "")
+                        if (node.InnerText != "") { city = node.InnerText; }
+                        else
                         {
                             node = xmlDoc.SelectSingleNode(".//suggestions/data/settlement_with_type");
                             if (node != null) { city = node.InnerText; }
