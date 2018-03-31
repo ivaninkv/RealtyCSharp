@@ -17,7 +17,7 @@ namespace Realty
         /// <summary>
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
-        /// <param name="searchurl"></param>
+        /// <param name="searchurl">Поисковый запрос, который нужно распарсить.</param>
         public Cian(string searchurl)
         {
             if (string.IsNullOrWhiteSpace(searchurl))

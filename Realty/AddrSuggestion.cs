@@ -19,7 +19,7 @@ namespace Realty
         /// <summary>
         /// Конструктор с указанием токена для подключения к dadata
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">Токен для подключения к dadata</param>
         public AddrSuggestion(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
@@ -33,8 +33,8 @@ namespace Realty
         /// <summary>
         /// Конструктор с указанием токена и url для подключения к dadata
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="url"></param>
+        /// <param name="token">Токен для подключения к dadata</param>
+        /// <param name="url">Url сервиса dadata</param>
         public AddrSuggestion(string token, string url) : this(token)
         {
             Url = url;
@@ -64,8 +64,8 @@ namespace Realty
         /// <summary>
         /// Получить подсказку по адресу, образец адреса и количество посдсказок
         /// </summary>
-        /// <param name="Addr"></param>
-        /// <param name="qty"></param>
+        /// <param name="Addr">Адрес для которого нужно искать подсказки</param>
+        /// <param name="qty">Количество подсказок</param>
         public void GetAddrSuggestion(string Addr, int qty = 1)
         {
             string q = String.Format(Const.DadataAddrQuery, Addr, qty);

@@ -1,5 +1,8 @@
 ﻿using System;
 
+/// <summary>
+/// Программа парсинга сайтов.
+/// </summary>
 namespace Realty
 {
     /// <summary>

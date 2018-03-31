@@ -25,8 +25,8 @@ namespace Realty
         /// <summary>
         /// Базовый конструктор
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="method"></param>
+        /// <param name="url">Url запроса.</param>
+        /// <param name="method">Метод запрса. Возможные значения [POST, GET, PUT, PATCH, DELETE].</param>
         public CustomRequest(string url, string method = "GET")
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -47,11 +47,11 @@ namespace Realty
         /// <summary>
         /// Расширенноый конструктор
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="request"></param>
-        /// <param name="method"></param>
-        /// <param name="contentType"></param>
-        /// <param name="accept"></param>
+        /// <param name="url">Url запроса.</param>
+        /// <param name="request">Текст запроса.</param>
+        /// <param name="method">Метод запрса. Возможные значения [POST, GET, PUT, PATCH, DELETE].</param>
+        /// <param name="contentType">Используемый ContentType (формат ответа).</param>
+        /// <param name="accept">Используемый Accept (формат запроса).</param>
         public CustomRequest(string url,
             string request,
             string method,
@@ -122,7 +122,7 @@ namespace Realty
         /// <summary>
         /// Отправка запроса
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Возвращает результат выполнения запроса.</returns>
         public string SendRequest()
         {
             HttpWebRequest req = WebRequest.CreateHttp(Url);             
