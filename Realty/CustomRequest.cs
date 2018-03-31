@@ -10,12 +10,14 @@ namespace Realty
     /// </summary>
     public class CustomRequest
     {
+        #region Поля
         private string url;
         private string request;
         private string method;
         private string contentType;
         private string accept;
-        private Dictionary<string, string> header;
+        private Dictionary<string, string> header = new Dictionary<string, string>();        
+        #endregion
 
         #region Конструкторы
         /// <summary>
@@ -47,13 +49,13 @@ namespace Realty
         /// <param name="method"></param>
         /// <param name="contentType"></param>
         /// <param name="accept"></param>
-        public CustomRequest(string url, 
-            string request, 
-            string method, 
-            string contentType = "application/xml", 
-            string accept = "application/xml") : this(url, request)
+        public CustomRequest(string url,
+            string request,
+            string method,
+            string contentType = "application/xml",
+            string accept = "application/xml") : this(url, method)
         {
-            Method = method;
+            Request = request;            
             ContentType = contentType;
             Accept = accept;
         }
@@ -76,8 +78,8 @@ namespace Realty
             get => method;
             set
             {
-                if (value != "POST" || value != "GET" || value != "PUT" || value != "PATCH" || value != "DELETE")
-                { throw new ArgumentException(string.Format("Аргумент {0} не может быть пустым.", nameof(value))); };
+                if (!(value == "POST" || value == "GET" || value == "PUT" || value == "PATCH" || value == "DELETE"))
+                { throw new ArgumentException("Метод должен быть один из [POST, GET, PUT, PATCH, DELETE]"); };
                 method = value;
             }
         }
@@ -92,10 +94,20 @@ namespace Realty
         /// <summary>
         /// Словарь заголовоков запроса (headers)
         /// </summary>
-        public Dictionary<string, string> Header { get => header; set => header = value; }
+        public Dictionary<string, string> Header { get => header; }
         #endregion
 
         #region Методы
+        /// <summary>
+        /// Добавляет header к запросу
+        /// </summary>
+        /// <param name="Key"></param>
+        /// <param name="Value"></param>
+        public void AddHeader(string Key, string Value)
+        {
+            header.Add(Key, Value);
+        }
+        
         /// <summary>
         /// Отправка запроса
         /// </summary>
@@ -105,25 +117,28 @@ namespace Realty
             HttpWebRequest req = WebRequest.CreateHttp(Url);
             req.Method = Method;
             req.ContentType = ContentType;
-            req.Accept = Accept;            
+            req.Accept = Accept;
             foreach (KeyValuePair<string, string> kvp in Header)
             {
-                req.Headers.Add(kvp.Key, kvp.Value);                
+                req.Headers.Add(kvp.Key, kvp.Value);
             }
 
-            StreamWriter sw = new StreamWriter(req.GetRequestStream());
-            sw.Write(Request);
-            sw.Close();
+            if (Request != "")
+            {
+                StreamWriter sw = new StreamWriter(req.GetRequestStream());
+                sw.Write(Request);
+                sw.Close();
+            }            
             HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            HttpStatusCode httpStatus = res.StatusCode;
-            Console.WriteLine(String.Format("HttpStatusCode = {0}", httpStatus.ToString()));
-            if (res.StatusDescription == "OK")
+            HttpStatusCode httpStatus = res.StatusCode;            
+            if (httpStatus.ToString() == "OK")
             {
                 StreamReader sr = new StreamReader(res.GetResponseStream());
                 return (sr.ReadToEnd().Trim());
             }
             return ("");
-
-            #endregion
         }
+        #endregion
+
+    }
 }

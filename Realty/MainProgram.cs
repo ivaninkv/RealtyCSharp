@@ -11,9 +11,10 @@ namespace Realty
             Console.WriteLine(addrSuggestion.City);
             Console.WriteLine(addrSuggestion.Street);
 
+            
             var c = new Cian("https://github.com/AngleSharp/AngleSharp/wiki/Documentation");
             c.Parse();
-
+            
             Console.ReadKey();          
             
             return 0;

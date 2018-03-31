@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.IO;
 using System.Xml;
 
 namespace Realty
@@ -10,11 +8,14 @@ namespace Realty
     /// </summary>
     public class AddrSuggestion
     {
+        #region Поля
         private string token;
         private string url;
         private string city;
         private string street;
+        #endregion
 
+        #region Конструкторы
         /// <summary>
         /// Конструктор с указанием токена для подключения к dadata
         /// </summary>
@@ -38,7 +39,9 @@ namespace Realty
         {
             Url = url;
         }
+        #endregion
 
+        #region Свойства
         /// <summary>
         /// Токен для подключения к dadata
         /// </summary>
@@ -55,7 +58,9 @@ namespace Realty
         /// Распарсенная улица, только для чтения
         /// </summary>
         public string Street { get => street; }
+        #endregion
 
+        #region Методы
         /// <summary>
         /// Получить подсказку по адресу, образец адреса и количество посдсказок
         /// </summary>
@@ -63,40 +68,33 @@ namespace Realty
         /// <param name="qty"></param>
         public void GetAddrSuggestion(string Addr, int qty = 1)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(Url);
-            request.Method = "POST";
-            request.ContentType = "application/xml";
-            request.Accept = "application/xml";            
-            request.Headers.Add("Authorization", "Token " + Token);
-            StreamWriter sw = new StreamWriter(request.GetRequestStream());
             string q = String.Format(Const.q, Addr, qty);
-            sw.Write(q);
-            sw.Close();
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-
-            if (response.StatusDescription == "OK")
+            CustomRequest customRequest = new CustomRequest(Url, q, "POST");
+            customRequest.AddHeader("Authorization", "Token " + Token);
+            string xmlString = customRequest.SendRequest();
+            if (xmlString != "")
             {
                 XmlDocument xmlDoc = new XmlDocument();
-                StreamReader sr = new StreamReader(response.GetResponseStream());
-                string xmlString = sr.ReadToEnd().Trim();
-                if (xmlString != "")
-                {                    
-                    xmlDoc.LoadXml(xmlString);
-                    XmlNode node;
-                    node = xmlDoc.SelectSingleNode(".//suggestions/data/city_with_type");
-                    if (node != null)
+                xmlDoc.LoadXml(xmlString);
+                XmlNode node;
+                node = xmlDoc.SelectSingleNode(".//suggestions/data/city_with_type");
+                if (node != null)
+                {
+                    if (node.InnerText != "") { city = node.InnerText; }
+                    else
                     {
-                        if (node.InnerText != "") { city = node.InnerText; }
-                        else
-                        {
-                            node = xmlDoc.SelectSingleNode(".//suggestions/data/settlement_with_type");
-                            if (node != null) { city = node.InnerText; }
-                        }
+                        node = xmlDoc.SelectSingleNode(".//suggestions/data/settlement_with_type");
+                        if (node != null) { city = node.InnerText; }
                     }
-                    node = xmlDoc.SelectSingleNode(".//suggestions/data/street");
-                    if (node != null) { street = node.InnerText; }
                 }
+                node = xmlDoc.SelectSingleNode(".//suggestions/data/street");
+                if (node != null) { street = node.InnerText; }
             }
+
         }
+        
+        
+        #endregion
+
     }
 }

@@ -9,8 +9,11 @@ namespace Realty
     /// </summary>
     public class Cian
     {
+        #region Поля
         private string searchUrl;
+        #endregion
 
+        #region Конструкторы
         /// <summary>
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
@@ -24,21 +27,27 @@ namespace Realty
             }
             SearchUrl = searchurl;
         }
+        #endregion
 
+        #region Свойства
         /// <summary>
-        /// Задает или получает поисковую строку
+        /// Поисковая строка
         /// </summary>
         public string SearchUrl { get => searchUrl; set => searchUrl = value; }
+        #endregion
 
+        #region Методы
         /// <summary>
         /// Парсит результаты запроса
         /// </summary>
         public void Parse()
         {
+            CustomRequest customRequest = new CustomRequest(searchUrl, "", "GET", "", "");
             HtmlParser parser = new HtmlParser();
-            IHtmlDocument document = parser.Parse(searchUrl);
+            IHtmlDocument document = parser.Parse(customRequest.SendRequest());
             
             Console.WriteLine(document.DocumentElement.OuterHtml);
         }
+        #endregion
     }
 }
