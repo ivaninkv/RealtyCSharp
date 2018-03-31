@@ -44,7 +44,7 @@ namespace Realty
         {
             CustomRequest customRequest = new CustomRequest(searchUrl, "", "GET", "", "")
             {
-                UseProxy = true
+                UseProxy = false
             };
             string htmlPage = customRequest.SendRequest();
 

@@ -8,8 +8,11 @@ namespace Realty
     /// </summary>
     public class Proxy
     {
+        #region Поля
         private string proxyString;
+        #endregion
 
+        #region Конструкторы
         /// <summary>
         /// Читает список прокси из каталога с программой
         /// </summary>
@@ -19,10 +22,14 @@ namespace Realty
             Random rnd = new Random();
             ProxyString = "http://" + proxyList[rnd.Next(0, proxyList.GetLength(0) - 1)].ToString();            
         }
+        #endregion
 
+        #region Свойства
         /// <summary>
         /// Строка прокси-сервера
         /// </summary>
-        public string ProxyString { get => proxyString; set => proxyString = value; }     
+        public string ProxyString { get => proxyString; set => proxyString = value; }
+        #endregion
+
     }
 }
