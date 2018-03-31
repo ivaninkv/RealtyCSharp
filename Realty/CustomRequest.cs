@@ -18,6 +18,7 @@ namespace Realty
         private string accept;
         private Dictionary<string, string> header = new Dictionary<string, string>();
         private string userAgent;
+        private bool useProxy;
         #endregion
 
         #region Конструкторы
@@ -101,14 +102,18 @@ namespace Realty
         /// Используемый UserAgent
         /// </summary>
         public string UserAgent { get => userAgent; set => userAgent = value; }
+        /// <summary>
+        /// Использовать ли прокси-сервер
+        /// </summary>
+        public bool UseProxy { get => useProxy; set => useProxy = value; }
         #endregion
 
         #region Методы
         /// <summary>
         /// Добавляет header к запросу
         /// </summary>
-        /// <param name="Key"></param>
-        /// <param name="Value"></param>
+        /// <param name="Key">Ключ</param>
+        /// <param name="Value">Значение</param>
         public void AddHeader(string Key, string Value)
         {
             header.Add(Key, Value);
@@ -120,10 +125,18 @@ namespace Realty
         /// <returns></returns>
         public string SendRequest()
         {
-            HttpWebRequest req = WebRequest.CreateHttp(Url);            
+            HttpWebRequest req = WebRequest.CreateHttp(Url);             
             req.Method = Method;
             req.ContentType = ContentType;
             req.Accept = Accept;
+            if (UseProxy)
+            {
+                Proxy myProxy = new Proxy();
+                WebProxy webProxy = new WebProxy();
+                Uri newUri = new Uri(myProxy.ProxyString);
+                webProxy.Address = newUri;
+                req.Proxy = webProxy;
+            }            
             foreach (KeyValuePair<string, string> kvp in Header)
             {
                 req.Headers.Add(kvp.Key, kvp.Value);

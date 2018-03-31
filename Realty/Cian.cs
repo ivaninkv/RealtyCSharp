@@ -42,9 +42,14 @@ namespace Realty
         /// </summary>
         public void Parse()
         {
-            CustomRequest customRequest = new CustomRequest(searchUrl, "", "GET", "", "");
+            CustomRequest customRequest = new CustomRequest(searchUrl, "", "GET", "", "")
+            {
+                UseProxy = true
+            };
+            string htmlPage = customRequest.SendRequest();
+
             HtmlParser parser = new HtmlParser();
-            var page = parser.Parse(customRequest.SendRequest());            
+            var page = parser.Parse(htmlPage);
             var CssSel = page.QuerySelectorAll(".address-path--12tl2");
             int i = 1;
             foreach (var item in CssSel)
@@ -52,7 +57,7 @@ namespace Realty
                 Console.WriteLine(String.Format("{0} - {1}", i, item.Text()));                
                 i++;
             }            
-            Console.WriteLine("Finish");
+            Console.WriteLine("Finish");            
         }
         #endregion
     }
