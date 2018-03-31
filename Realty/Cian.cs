@@ -1,5 +1,5 @@
 ﻿using System;
-using AngleSharp.Dom.Html;
+using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
 
 namespace Realty
@@ -44,9 +44,15 @@ namespace Realty
         {
             CustomRequest customRequest = new CustomRequest(searchUrl, "", "GET", "", "");
             HtmlParser parser = new HtmlParser();
-            IHtmlDocument document = parser.Parse(customRequest.SendRequest());
-            
-            Console.WriteLine(document.DocumentElement.OuterHtml);
+            var page = parser.Parse(customRequest.SendRequest());            
+            var CssSel = page.QuerySelectorAll(".address-path--12tl2");
+            int i = 1;
+            foreach (var item in CssSel)
+            {                
+                Console.WriteLine(String.Format("{0} - {1}", i, item.Text()));                
+                i++;
+            }            
+            Console.WriteLine("Finish");
         }
         #endregion
     }

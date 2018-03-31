@@ -68,7 +68,7 @@ namespace Realty
         /// <param name="qty"></param>
         public void GetAddrSuggestion(string Addr, int qty = 1)
         {
-            string q = String.Format(Const.q, Addr, qty);
+            string q = String.Format(Const.DadataAddrQuery, Addr, qty);
             CustomRequest customRequest = new CustomRequest(Url, q, "POST");
             customRequest.AddHeader("Authorization", "Token " + Token);
             string xmlString = customRequest.SendRequest();

@@ -16,7 +16,8 @@ namespace Realty
         private string method;
         private string contentType;
         private string accept;
-        private Dictionary<string, string> header = new Dictionary<string, string>();        
+        private Dictionary<string, string> header = new Dictionary<string, string>();
+        private string userAgent;
         #endregion
 
         #region Конструкторы
@@ -39,6 +40,7 @@ namespace Realty
             }
             Url = url;
             Method = method;
+            UserAgent = Const.GetUserAgent();
         }
 
         /// <summary>
@@ -95,6 +97,10 @@ namespace Realty
         /// Словарь заголовоков запроса (headers)
         /// </summary>
         public Dictionary<string, string> Header { get => header; }
+        /// <summary>
+        /// Используемый UserAgent
+        /// </summary>
+        public string UserAgent { get => userAgent; set => userAgent = value; }
         #endregion
 
         #region Методы
@@ -114,7 +120,7 @@ namespace Realty
         /// <returns></returns>
         public string SendRequest()
         {
-            HttpWebRequest req = WebRequest.CreateHttp(Url);
+            HttpWebRequest req = WebRequest.CreateHttp(Url);            
             req.Method = Method;
             req.ContentType = ContentType;
             req.Accept = Accept;
