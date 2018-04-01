@@ -15,10 +15,11 @@ namespace Realty
             Console.WriteLine(addrSuggestion.Street);
 
 
-            
-            var c = new Cian("https://www.cian.ru/cat.php?currency=2&deal_type=sale&engine_version=2&maxprice=2000000&minprice=1&offer_type=flat&region=4593&room1=1&p=3");
-            c.Parse();
-            
+            for (int i = 1; i <= 10; i++)
+            {
+                var c = new Cian("https://www.cian.ru/cat.php?currency=2&deal_type=sale&engine_version=2&maxprice=2000000&minprice=1&offer_type=flat&region=4593&room1=1&p=3");
+                c.Parse();
+            }
             
             Console.ReadKey();          
             

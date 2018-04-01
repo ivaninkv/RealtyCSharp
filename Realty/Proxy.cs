@@ -10,6 +10,7 @@ namespace Realty
     {
         #region Поля
         private string proxyString;
+        private int proxyPort;
         #endregion
 
         #region Конструкторы
@@ -20,15 +21,21 @@ namespace Realty
         {
             string[] proxyList = File.ReadAllLines(@"proxy.txt");            
             Random rnd = new Random();
-            ProxyString = "http://" + proxyList[rnd.Next(0, proxyList.GetLength(0) - 1)].ToString();            
+            string[] proxy = proxyList[rnd.Next(0, proxyList.GetLength(0) - 1)].ToString().Split(':');
+            ProxyString = proxy[0].ToString();
+            ProxyPort = Convert.ToInt32(proxy[1].ToString());
         }
         #endregion
 
         #region Свойства
         /// <summary>
-        /// Строка прокси-сервера
+        /// Хост прокси-сервера
         /// </summary>
         public string ProxyString { get => proxyString; set => proxyString = value; }
+        /// <summary>
+        /// Порт прокси-сервера
+        /// </summary>
+        public int ProxyPort { get => proxyPort; set => proxyPort = value; }
         #endregion
 
     }

@@ -138,9 +138,7 @@ namespace Realty
             if (UseProxy)
             {
                 Proxy myProxy = new Proxy();
-                WebProxy webProxy = new WebProxy();
-                Uri newUri = new Uri(myProxy.ProxyString);
-                webProxy.Address = newUri;
+                WebProxy webProxy = new WebProxy(myProxy.ProxyString, myProxy.ProxyPort);                
                 req.Proxy = webProxy;
             }
 
