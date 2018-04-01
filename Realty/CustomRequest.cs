@@ -19,6 +19,7 @@ namespace Realty
         private Dictionary<string, string> header = new Dictionary<string, string>();
         private string userAgent;
         private bool useProxy;
+        private string responseUrl;
         #endregion
 
         #region Конструкторы
@@ -106,6 +107,10 @@ namespace Realty
         /// Использовать ли прокси-сервер
         /// </summary>
         public bool UseProxy { get => useProxy; set => useProxy = value; }
+        /// <summary>
+        /// Url ответа
+        /// </summary>
+        public string ResponseUrl { get => responseUrl; }
         #endregion
 
         #region Методы
@@ -129,6 +134,7 @@ namespace Realty
             req.Method = Method;
             req.ContentType = ContentType;
             req.Accept = Accept;
+
             if (UseProxy)
             {
                 Proxy myProxy = new Proxy();
@@ -136,7 +142,8 @@ namespace Realty
                 Uri newUri = new Uri(myProxy.ProxyString);
                 webProxy.Address = newUri;
                 req.Proxy = webProxy;
-            }            
+            }
+
             foreach (KeyValuePair<string, string> kvp in Header)
             {
                 req.Headers.Add(kvp.Key, kvp.Value);
@@ -148,9 +155,9 @@ namespace Realty
                 sw.Write(Request);
                 sw.Close();
             }            
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
-            HttpStatusCode httpStatus = res.StatusCode;            
-            if (httpStatus.ToString() == "OK")
+            HttpWebResponse res = (HttpWebResponse)req.GetResponse();                        
+            responseUrl = res.ResponseUri.AbsoluteUri;                       
+            if (res.StatusCode.ToString() == "OK")
             {
                 StreamReader sr = new StreamReader(res.GetResponseStream());
                 return (sr.ReadToEnd().Trim());

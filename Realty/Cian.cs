@@ -47,6 +47,8 @@ namespace Realty
                 UseProxy = false
             };
             string htmlPage = customRequest.SendRequest();
+            if (SearchUrl == customRequest.ResponseUrl) { Console.WriteLine("Equal"); }
+            else { Console.WriteLine("Not equal"); }
 
             HtmlParser parser = new HtmlParser();
             var page = parser.Parse(htmlPage);
