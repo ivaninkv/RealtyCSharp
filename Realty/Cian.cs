@@ -23,7 +23,7 @@ namespace Realty
             if (string.IsNullOrWhiteSpace(searchurl))
             {
                 throw new ArgumentException(
-                    string.Format("Аргумент {0} не может быть пустым.", nameof(searchurl)));
+                    string.Format($"Аргумент {nameof(searchurl)} не может быть пустым."));
             }
             SearchUrl = searchurl;
         }
@@ -56,7 +56,7 @@ namespace Realty
             int i = 1;
             foreach (var item in CssSel)
             {                
-                Console.WriteLine(String.Format("{0} - {1}", i, item.Text()));                
+                Console.WriteLine(String.Format($"{i} - {item.Text()}"));                
                 i++;
             }            
             Console.WriteLine("Finish");            

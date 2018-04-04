@@ -30,7 +30,7 @@ namespace Realty
             arrayList.Add("Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko");
 
             Random rnd = new Random();            
-            return(arrayList[rnd.Next(0, arrayList.Count - 1)].ToString());
+            return arrayList[rnd.Next(0, arrayList.Count - 1)].ToString();
         }
     }
 }

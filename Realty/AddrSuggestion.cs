@@ -25,7 +25,7 @@ namespace Realty
             if (string.IsNullOrWhiteSpace(token))
             {
                 throw new ArgumentException(
-                    string.Format("Аргумент {0} не может быть пустым.", nameof(token)));
+                    string.Format($"Аргумент {nameof(token)} не может быть пустым."));
             }
             Token = token;
         }

@@ -33,12 +33,12 @@ namespace Realty
             if (string.IsNullOrWhiteSpace(url))
             {
                 throw new ArgumentException(
-                    string.Format("Аргумент {0} не может быть пустым.", nameof(url)));
+                    string.Format($"Аргумент {nameof(url)} не может быть пустым."));
             }
             if (string.IsNullOrWhiteSpace(method))
             {
                 throw new ArgumentException(
-                    string.Format("Аргумент {0} не может быть пустым.", nameof(method)));
+                    string.Format($"Аргумент {nameof(method)} не может быть пустым."));
             }
             Url = url;
             Method = method;
@@ -158,9 +158,9 @@ namespace Realty
             if (res.StatusCode.ToString() == "OK")
             {
                 StreamReader sr = new StreamReader(res.GetResponseStream());
-                return (sr.ReadToEnd().Trim());
+                return sr.ReadToEnd().Trim();
             }
-            return ("");
+            return "";
         }
         #endregion
 
