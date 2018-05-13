@@ -46,7 +46,7 @@ namespace Realty
         }
 
         /// <summary>
-        /// Расширенноый конструктор
+        /// Расширенный конструктор
         /// </summary>
         /// <param name="url">Url запроса.</param>
         /// <param name="request">Текст запроса.</param>

@@ -52,7 +52,7 @@ namespace Realty
 
             HtmlParser parser = new HtmlParser();
             var page = parser.Parse(htmlPage);
-            var CssSel = page.QuerySelectorAll(".address-path--12tl2");
+            var CssSel = page.QuerySelectorAll(".address-links--3Qx74");
             int i = 1;
             foreach (var item in CssSel)
             {                
