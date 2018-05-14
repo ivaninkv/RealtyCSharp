@@ -152,15 +152,29 @@ namespace Realty
                 StreamWriter sw = new StreamWriter(req.GetRequestStream());
                 sw.Write(Request);
                 sw.Close();
-            }            
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();                        
-            responseUrl = res.ResponseUri.AbsoluteUri;                       
-            if (res.StatusCode.ToString() == "OK")
-            {
-                StreamReader sr = new StreamReader(res.GetResponseStream());
-                return sr.ReadToEnd().Trim();
             }
-            return "";
+
+            try
+            {
+                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+                responseUrl = res.ResponseUri.AbsoluteUri;
+                if (res.StatusCode.ToString() == "OK")
+                {
+                    StreamReader sr = new StreamReader(res.GetResponseStream());
+                    string answer = sr.ReadToEnd().Trim();
+                    res.Close();
+                    return answer;
+                } else
+                {
+                    res.Close();
+                    return "";
+                }
+            }
+            catch (System.Net.WebException e)
+            {
+                responseUrl = "Error";                
+                return "";
+            }            
         }
         #endregion
 

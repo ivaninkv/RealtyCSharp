@@ -2,16 +2,18 @@
 using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
 using System.Data;
+using System.Threading;
 
 namespace Realty
 {
     /// <summary>
     /// Базовый класс для работы с сайтами недвижимости
     /// </summary>
-    class Parser
+    public class Parser
     {
         #region Поля
         private string searchUrl;
+        private int delay;
         private string floor;
         private string link;
         private string area;
@@ -33,6 +35,12 @@ namespace Realty
                     string.Format($"Аргумент {nameof(searchurl)} не может быть пустым."));
             }
             SearchUrl = searchurl;
+
+            dt.Columns.Add("Floor", typeof(String));
+            dt.Columns.Add("Link", typeof(String));
+            dt.Columns.Add("Area", typeof(String));
+            dt.Columns.Add("Address", typeof(String));
+            dt.Columns.Add("Price", typeof(String));
         }
         #endregion
 
@@ -41,6 +49,10 @@ namespace Realty
         /// Поисковая строка
         /// </summary>
         public string SearchUrl { get => searchUrl; set => searchUrl = value; }
+        /// <summary>
+        /// Задержка между запросами к сайту
+        /// </summary>
+        public int Delay { get => delay; set => delay = value; }
         /// <summary>
         /// Этаж
         /// </summary>
@@ -60,24 +72,31 @@ namespace Realty
         /// <summary>
         /// Цена квартиры
         /// </summary>
-        public string Price { get => price; set => price = value; }
+        public string Price { get => price; set => price = value; }        
         #endregion
 
         #region Методы
         /// <summary>
         /// Парсит результаты запроса
         /// </summary>
-        public DataTable Parse()
+        /// <returns>Дататейбл с результатами запроса</returns>
+        public virtual DataTable Parse()
         {                        
             int pagenum = 1;
             dt.Clear();
 
             while (true)
             {
+                Console.WriteLine($"Page - {pagenum}");
+
                 CustomRequest customRequest = new CustomRequest(searchUrl + $"&p={pagenum}", "", "GET", "", "") { UseProxy = false };
                 string htmlPage = customRequest.SendRequest();
                 if (SearchUrl + $"&p={pagenum}" == customRequest.ResponseUrl) { FillDT(htmlPage); }
                 else { break; }
+                if (delay > 0) { Thread.Sleep(delay * 1000); }
+                pagenum += 1;
+
+                //break; // test
             }
 
             return dt;
@@ -87,14 +106,21 @@ namespace Realty
         {
             HtmlParser parser = new HtmlParser();
             var page = parser.Parse(htmlPage);
-            var CssSel = page.QuerySelectorAll(".address-links--3Qx74");
             
-            foreach (var item in CssSel)
+            var floor_sel = page.QuerySelectorAll(floor);
+            var link_sel = page.QuerySelectorAll(link);
+            var area_sel = page.QuerySelectorAll(area);
+            var address_sel = page.QuerySelectorAll(address);
+            var price_sel = page.QuerySelectorAll(price);
+
+            for (int i = 0; i < floor_sel.Length; i++)
             {
-                Console.WriteLine(item.Text());
-                
-            }
-            Console.WriteLine("Finish");
+                dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim(),
+                                            link_sel[i].TextContent.Trim(),
+                                            area_sel[i].TextContent.Trim(),
+                                            address_sel[i].TextContent.Trim(),
+                                            price_sel[i].TextContent.Trim() });
+            }            
         }
         #endregion
     }

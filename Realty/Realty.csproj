@@ -48,8 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddrSuggestion.cs" />
+    <Compile Include="Avito.cs" />
     <Compile Include="Cian.cs" />
     <Compile Include="Const.cs" />
+    <Compile Include="CSVUtlity.cs" />
     <Compile Include="MainProgram.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -5,21 +5,21 @@ namespace Realty
     /// <summary>
     /// Класс для работы с сайтом cian.ru
     /// </summary>
-    public class Cian : Parser
+    public class Avito : Parser
     {
         #region Конструкторы
         /// <summary>
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
         /// <param name="searchurl">Поисковый запрос, который нужно распарсить.</param>
-        public Cian(string searchurl) : base(searchurl)
+        public Avito(string searchurl, int delay = 4) : base(searchurl)
         {
-            Delay = 3;
-            Floor = ".header--1ZTfS";
-            Link = ".cardLink--3KbME";
-            Area = ".header--1WFWC";
-            Address = ".address-path--12tl2";
-            Price = ".header--2lxlC";
+            Delay = delay;
+            Floor = ".floor";
+            Link = ".description-title-link";
+            Area = ".area";
+            Address = ".address";
+            Price = ".price";
         }
         #endregion
 
