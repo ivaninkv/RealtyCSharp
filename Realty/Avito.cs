@@ -4,7 +4,7 @@ using System.Data;
 namespace Realty
 {
     /// <summary>
-    /// Класс для работы с сайтом cian.ru
+    /// Класс для работы с сайтом avito.ru
     /// </summary>
     public class Avito : Parser
     {
