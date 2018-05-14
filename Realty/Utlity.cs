@@ -6,7 +6,7 @@ using System.Linq;
 namespace Realty
 {
     /// <summary>
-    /// Класс для работы с *.csv
+    /// Различные вспомогательные утилиты
     /// </summary>
     public static class Utlity
     {
