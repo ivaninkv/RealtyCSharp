@@ -8,8 +8,9 @@ namespace Realty
     /// <summary>
     /// Класс для работы с *.csv
     /// </summary>
-    public static class CSVUtlity
+    public static class Utlity
     {
+        #region Методы
         /// <summary>
         /// Экспортирует DataTable в *.csv файл
         /// </summary>
@@ -55,5 +56,47 @@ namespace Realty
             }
             sw.Close();
         }
+
+        /// <summary>
+        /// Меняет тип столбца в DataTable
+        /// </summary>
+        /// <param name="table">DataTable, в котором нужно изменить тип столбца</param>
+        /// <param name="columnname">Название столбца</param>
+        /// <param name="newtype">Новый тип столбца</param>
+        /// <returns></returns>
+        public static bool ChangeColumnDataType(DataTable table, string columnname, Type newtype)
+        {
+            if (table.Columns.Contains(columnname) == false)
+                return false;
+
+            DataColumn column = table.Columns[columnname];
+            if (column.DataType == newtype)
+                return true;
+
+            try
+            {
+                DataColumn newcolumn = new DataColumn("temporary", newtype);
+                table.Columns.Add(newcolumn);
+                foreach (DataRow row in table.Rows)
+                {
+                    try
+                    {
+                        row["temporary"] = Convert.ChangeType(row[columnname], newtype);
+                    }
+                    catch
+                    {
+                    }
+                }
+                table.Columns.Remove(columnname);
+                newcolumn.ColumnName = columnname;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
     }
 }

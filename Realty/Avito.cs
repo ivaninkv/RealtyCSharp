@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace Realty
 {
@@ -12,6 +13,7 @@ namespace Realty
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
         /// <param name="searchurl">Поисковый запрос, который нужно распарсить.</param>
+        /// <param name="delay">Задержка между запросами, с.</param>
         public Avito(string searchurl, int delay = 4) : base(searchurl)
         {
             Delay = delay;
@@ -32,6 +34,14 @@ namespace Realty
         {
             var dt = new DataTable();
             dt = base.Parse();
+            foreach (DataRow row in dt.Rows)
+            {                
+                row["Area"] = row["Area"].ToString().Replace("м²", String.Empty).Replace(".", ",").Trim();                
+                row["Price"] = row["Price"].ToString().Replace("р. в месяц", String.Empty).Replace(".", ",").Trim();
+            }
+            
+            Utlity.ChangeColumnDataType(dt, "Area", typeof(decimal));
+            Utlity.ChangeColumnDataType(dt, "Price", typeof(decimal));
 
             return dt;
         }
