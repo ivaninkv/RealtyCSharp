@@ -21,6 +21,14 @@
       <DocumentationSource sourceFile="bin\Debug\Realty.xml" />
       <DocumentationSource sourceFile="bin\Debug\Realty.exe" />
     </DocumentationSources>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <SyntaxFilters>None</SyntaxFilters>
+    <PresentationStyle>VS2013</PresentationStyle>
+    <CleanIntermediates>True</CleanIntermediates>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <IndentHtml>False</IndentHtml>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->

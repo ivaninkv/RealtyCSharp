@@ -40,8 +40,8 @@ namespace Realty
                 row["Price"] = row["Price"].ToString().Replace("р. в месяц", String.Empty).Replace(".", ",").Trim();
             }
             
-            Utlity.ChangeColumnDataType(dt, "Area", typeof(decimal));
-            Utlity.ChangeColumnDataType(dt, "Price", typeof(decimal));
+            dt.ChangeColumnDataType("Area", typeof(decimal));
+            dt.ChangeColumnDataType("Price", typeof(decimal));
 
             return dt;
         }

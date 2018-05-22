@@ -62,16 +62,15 @@ namespace Realty
         /// </summary>
         /// <param name="table">DataTable, в котором нужно изменить тип столбца</param>
         /// <param name="columnname">Название столбца</param>
-        /// <param name="newtype">Новый тип столбца</param>
-        /// <returns></returns>
-        public static bool ChangeColumnDataType(DataTable table, string columnname, Type newtype)
+        /// <param name="newtype">Новый тип столбца</param>        
+        public static void ChangeColumnDataType(this DataTable table, string columnname, Type newtype)
         {
             if (table.Columns.Contains(columnname) == false)
-                return false;
+                return;
 
             DataColumn column = table.Columns[columnname];
             if (column.DataType == newtype)
-                return true;
+                return;
 
             try
             {
@@ -92,10 +91,10 @@ namespace Realty
             }
             catch (Exception)
             {
-                return false;
+                return;
             }
 
-            return true;
+            return;
         }
         #endregion
     }
