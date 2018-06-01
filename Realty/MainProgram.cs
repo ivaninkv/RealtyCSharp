@@ -16,12 +16,18 @@ namespace Realty
             Console.WriteLine(addrSuggestion.Street);
             */
 
-
-            var site = new Avito("https://www.avito.ru/odintsovo/kvartiry/sdam/na_dlitelnyy_srok/1-komnatnye?pmax=999999&pmin=1&view=list");
-            var dt = site.Parse();
-            Console.WriteLine(dt.Rows.Count);
-            dt.ToCSV("test.csv");
-            Console.WriteLine("Finish.");
+            Console.WriteLine("Введите url для парсинга:");
+            string url = Console.ReadLine();
+            string host = new Uri(url).Host;
+            if (host == "www.avito.ru")
+            {
+                var site = new Avito(url);
+                var dt = site.Parse();
+                Console.WriteLine($"Распарсено {dt.Rows.Count} объявлений.");
+                dt.ToCSV("avito.csv");
+            }
+            else
+                Console.WriteLine($"Не найден обработчик для сайта {host}.");
 
             Console.ReadKey();
             return 0;

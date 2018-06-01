@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Realty
 {
@@ -95,6 +96,16 @@ namespace Realty
             }
 
             return;
+        }
+
+        /// <summary>
+        /// Удаляет множественные пробельные символы.
+        /// </summary>
+        /// <param name="str">Исходная строка</param>
+        /// <returns>Корректная строка</returns>
+        public static string RemoveIncorrectChars(this string str)
+        {
+            return Regex.Replace(str, @"\s+", " ");
         }
         #endregion
     }

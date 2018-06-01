@@ -121,13 +121,13 @@ namespace Realty
 
             for (int i = 0; i < floor_sel.Length; i++)
             {
-                dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim(),
+                dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim().RemoveIncorrectChars(),
                                             siteUrl + Regex.Match(link_sel[i].OuterHtml, @"<a.*?href=(""|')(?<href>.*?)(""|').*?>(?<value>.*?)</a>",RegexOptions.IgnoreCase).Groups["href"].Value,
-                                            area_sel[i].TextContent.Trim(),
-                                            address_sel[i].TextContent.Trim(),
-                                            price_sel[i].TextContent.Trim() });
+                                            area_sel[i].TextContent.Trim().RemoveIncorrectChars(),
+                                            address_sel[i].TextContent.Trim().RemoveIncorrectChars(),
+                                            price_sel[i].TextContent.Trim().RemoveIncorrectChars() });
             }            
-        }
+        }        
         #endregion
     }
 }
