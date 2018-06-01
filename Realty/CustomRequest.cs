@@ -170,9 +170,9 @@ namespace Realty
                     return "";
                 }
             }
-            catch (System.Net.WebException e)
+            catch (WebException e)
             {
-                responseUrl = "Error";                
+                responseUrl = e.Message;                
                 return "";
             }            
         }

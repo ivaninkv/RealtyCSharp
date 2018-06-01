@@ -3,6 +3,7 @@ using AngleSharp.Extensions;
 using AngleSharp.Parser.Html;
 using System.Data;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace Realty
 {
@@ -12,7 +13,11 @@ namespace Realty
     public class Parser
     {
         #region Поля
-        private string searchUrl;
+        /// <summary>
+        /// Корневой URL сайта
+        /// </summary>
+        public readonly string siteUrl;
+        private string searchUrl;        
         private int delay;
         private string floor;
         private string link;
@@ -35,6 +40,7 @@ namespace Realty
                     string.Format($"Аргумент {nameof(searchurl)} не может быть пустым."));
             }
             SearchUrl = searchurl;
+            siteUrl = new Uri(SearchUrl).Host;
 
             dt.Columns.Add("Floor", typeof(String));
             dt.Columns.Add("Link", typeof(String));
@@ -72,7 +78,7 @@ namespace Realty
         /// <summary>
         /// Цена квартиры
         /// </summary>
-        public string Price { get => price; set => price = value; }        
+        public string Price { get => price; set => price = value; }
         #endregion
 
         #region Методы
@@ -116,7 +122,7 @@ namespace Realty
             for (int i = 0; i < floor_sel.Length; i++)
             {
                 dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim(),
-                                            link_sel[i].TextContent.Trim(),
+                                            siteUrl + Regex.Match(link_sel[i].OuterHtml, @"<a.*?href=(""|')(?<href>.*?)(""|').*?>(?<value>.*?)</a>",RegexOptions.IgnoreCase).Groups["href"].Value,
                                             area_sel[i].TextContent.Trim(),
                                             address_sel[i].TextContent.Trim(),
                                             price_sel[i].TextContent.Trim() });
