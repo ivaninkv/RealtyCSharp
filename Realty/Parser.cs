@@ -17,13 +17,6 @@ namespace Realty
         /// Корневой URL сайта
         /// </summary>
         public readonly string siteUrl;
-        private string searchUrl;        
-        private int delay;
-        private string floor;
-        private string link;
-        private string area;
-        private string address;
-        private string price;
         private DataTable dt = new DataTable();
         #endregion
 
@@ -31,15 +24,15 @@ namespace Realty
         /// <summary>
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
-        /// <param name="searchurl">Поисковый запрос, который нужно распарсить.</param>
-        public Parser(string searchurl)
+        /// <param name="searchUrl">Поисковый запрос, который нужно распарсить.</param>
+        public Parser(string searchUrl)
         {
-            if (string.IsNullOrWhiteSpace(searchurl))
+            if (string.IsNullOrWhiteSpace(searchUrl))
             {
                 throw new ArgumentException(
-                    string.Format($"Аргумент {nameof(searchurl)} не может быть пустым."));
+                    string.Format($"Аргумент {nameof(searchUrl)} не может быть пустым."));
             }
-            SearchUrl = searchurl;
+            SearchUrl = searchUrl;
             siteUrl = new Uri(SearchUrl).Host;
 
             dt.Columns.Add("Floor", typeof(String));
@@ -54,31 +47,31 @@ namespace Realty
         /// <summary>
         /// Поисковая строка
         /// </summary>
-        public string SearchUrl { get => searchUrl; set => searchUrl = value; }
+        public string SearchUrl { get; set; }
         /// <summary>
         /// Задержка между запросами к сайту
         /// </summary>
-        public int Delay { get => delay; set => delay = value; }
+        public int Delay_s { get; set; }
         /// <summary>
         /// Этаж
         /// </summary>
-        public string Floor { get => floor; set => floor = value; }
+        public string Floor { get; set; }
         /// <summary>
         /// Ссылка на объявление
         /// </summary>
-        public string Link { get => link; set => link = value; }
+        public string Link { get; set; }
         /// <summary>
         /// Площадь квартиры
         /// </summary>
-        public string Area { get => area; set => area = value; }
+        public string Area { get; set; }
         /// <summary>
         /// Адрес
         /// </summary>
-        public string Address { get => address; set => address = value; }
+        public string Address { get; set; }
         /// <summary>
         /// Цена квартиры
         /// </summary>
-        public string Price { get => price; set => price = value; }
+        public string Price { get; set; }
         #endregion
 
         #region Методы
@@ -87,7 +80,7 @@ namespace Realty
         /// </summary>
         /// <returns>Дататейбл с результатами запроса</returns>
         public virtual DataTable Parse()
-        {                        
+        {
             int pagenum = 1;
             dt.Clear();
 
@@ -95,11 +88,11 @@ namespace Realty
             {
                 Console.WriteLine($"Page - {pagenum}");
 
-                CustomRequest customRequest = new CustomRequest(searchUrl + $"&p={pagenum}", "", "GET", "", "") { UseProxy = false };
+                CustomRequest customRequest = new CustomRequest(SearchUrl + $"&p={pagenum}", "", "GET", "", "") { UseProxy = false };
                 string htmlPage = customRequest.SendRequest();
                 if (SearchUrl + $"&p={pagenum}" == customRequest.ResponseUrl) { FillDT(htmlPage); }
                 else { break; }
-                if (delay > 0) { Thread.Sleep(delay * 1000); }
+                if (Delay_s > 0) { Thread.Sleep(Delay_s * 1000); }
                 pagenum += 1;
 
                 //break; // test
@@ -112,12 +105,12 @@ namespace Realty
         {
             HtmlParser parser = new HtmlParser();
             var page = parser.Parse(htmlPage);
-            
-            var floor_sel = page.QuerySelectorAll(floor);
-            var link_sel = page.QuerySelectorAll(link);
-            var area_sel = page.QuerySelectorAll(area);
-            var address_sel = page.QuerySelectorAll(address);
-            var price_sel = page.QuerySelectorAll(price);
+
+            var floor_sel = page.QuerySelectorAll(Floor);
+            var link_sel = page.QuerySelectorAll(Link);
+            var area_sel = page.QuerySelectorAll(Area);
+            var address_sel = page.QuerySelectorAll(Address);
+            var price_sel = page.QuerySelectorAll(Price);
 
             for (int i = 0; i < floor_sel.Length; i++)
             {
@@ -126,8 +119,8 @@ namespace Realty
                                             area_sel[i].TextContent.Trim().RemoveIncorrectChars(),
                                             address_sel[i].TextContent.Trim().RemoveIncorrectChars(),
                                             price_sel[i].TextContent.Trim().RemoveIncorrectChars() });
-            }            
-        }        
+            }
+        }
         #endregion
     }
 }

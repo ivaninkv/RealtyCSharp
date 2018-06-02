@@ -11,10 +11,10 @@ namespace Realty
         /// <summary>
         /// Конструктор, в качестве параметра принимает поисковую строку
         /// </summary>
-        /// <param name="searchurl">Поисковый запрос, который нужно распарсить.</param>
-        public Cian(string searchurl) : base(searchurl)
+        /// <param name="searchUrl">Поисковый запрос, который нужно распарсить.</param>
+        public Cian(string searchUrl) : base(searchUrl)
         {
-            Delay = 3;
+            Delay_s = 3;
             Floor = ".header--1ZTfS";
             Link = ".cardLink--3KbME";
             Area = ".header--1WFWC";

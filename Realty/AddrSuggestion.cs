@@ -9,8 +9,6 @@ namespace Realty
     public class AddrSuggestion
     {
         #region Поля
-        private string token;
-        private string url;
         private string city;
         private string street;
         #endregion
@@ -45,11 +43,11 @@ namespace Realty
         /// <summary>
         /// Токен для подключения к dadata
         /// </summary>
-        public string Token { get => token; set => token = value; }
+        public string Token { get; set; }
         /// <summary>
         /// Url подсказок по адресу
         /// </summary>
-        public string Url { get => url; set => url = value; }
+        public string Url { get; set; }
         /// <summary>
         /// Распарсенный город, только для чтения
         /// </summary>
@@ -90,11 +88,7 @@ namespace Realty
                 node = xmlDoc.SelectSingleNode(".//suggestions/data/street");
                 if (node != null) { street = node.InnerText; }
             }
-
         }
-        
-        
         #endregion
-
     }
 }

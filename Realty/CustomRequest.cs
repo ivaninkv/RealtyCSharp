@@ -11,14 +11,7 @@ namespace Realty
     public class CustomRequest
     {
         #region Поля
-        private string url;
-        private string request;
         private string method;
-        private string contentType;
-        private string accept;
-        private Dictionary<string, string> header = new Dictionary<string, string>();
-        private string userAgent;
-        private bool useProxy;
         private string responseUrl;
         #endregion
 
@@ -59,7 +52,7 @@ namespace Realty
             string contentType = "application/xml",
             string accept = "application/xml") : this(url, method)
         {
-            Request = request;            
+            Request = request;
             ContentType = contentType;
             Accept = accept;
         }
@@ -69,17 +62,17 @@ namespace Realty
         /// <summary>
         /// Url по которму отправить запрос
         /// </summary>
-        public string Url { get => url; set => url = value; }
+        public string Url { get; set; }
         /// <summary>
         /// Текст запроса
         /// </summary>
-        public string Request { get => request; set => request = value; }
+        public string Request { get; set; }
         /// <summary>
         /// Используемый метод
         /// </summary>
         public string Method
         {
-            get => method;
+            get => method; 
             set
             {
                 if (!(value == "POST" || value == "GET" || value == "PUT" || value == "PATCH" || value == "DELETE"))
@@ -90,23 +83,23 @@ namespace Realty
         /// <summary>
         /// Используемый ContentType (формат ответа)
         /// </summary>
-        public string ContentType { get => contentType; set => contentType = value; }
+        public string ContentType { get; set; }
         /// <summary>
         /// Используемый Accept (формат запроса)
         /// </summary>
-        public string Accept { get => accept; set => accept = value; }
+        public string Accept { get; set; }
         /// <summary>
         /// Словарь заголовоков запроса (headers)
         /// </summary>
-        public Dictionary<string, string> Header { get => header; }
+        public Dictionary<string, string> Header { get; }
         /// <summary>
         /// Используемый UserAgent
         /// </summary>
-        public string UserAgent { get => userAgent; set => userAgent = value; }
+        public string UserAgent { get; set; }
         /// <summary>
         /// Использовать ли прокси-сервер
         /// </summary>
-        public bool UseProxy { get => useProxy; set => useProxy = value; }
+        public bool UseProxy { get; set; }
         /// <summary>
         /// Url ответа
         /// </summary>
@@ -121,16 +114,16 @@ namespace Realty
         /// <param name="Value">Значение</param>
         public void AddHeader(string Key, string Value)
         {
-            header.Add(Key, Value);
+            Header.Add(Key, Value);
         }
-        
+
         /// <summary>
         /// Отправка запроса
         /// </summary>
         /// <returns>Возвращает результат выполнения запроса.</returns>
         public string SendRequest()
         {
-            HttpWebRequest req = WebRequest.CreateHttp(Url);             
+            HttpWebRequest req = WebRequest.CreateHttp(Url);
             req.Method = Method;
             req.ContentType = ContentType;
             req.Accept = Accept;
@@ -138,13 +131,16 @@ namespace Realty
             if (UseProxy)
             {
                 Proxy myProxy = new Proxy();
-                WebProxy webProxy = new WebProxy(myProxy.ProxyString, myProxy.ProxyPort);                
+                WebProxy webProxy = new WebProxy(myProxy.ProxyString, myProxy.ProxyPort);
                 req.Proxy = webProxy;
             }
 
-            foreach (KeyValuePair<string, string> kvp in Header)
+            if (Header != null)
             {
-                req.Headers.Add(kvp.Key, kvp.Value);
+                foreach (KeyValuePair<string, string> kvp in Header)
+                {
+                    req.Headers.Add(kvp.Key, kvp.Value);
+                }
             }
 
             if (Request != "")
@@ -164,7 +160,8 @@ namespace Realty
                     string answer = sr.ReadToEnd().Trim();
                     res.Close();
                     return answer;
-                } else
+                }
+                else
                 {
                     res.Close();
                     return "";
@@ -172,11 +169,10 @@ namespace Realty
             }
             catch (WebException e)
             {
-                responseUrl = e.Message;                
+                responseUrl = e.Message;
                 return "";
-            }            
+            }
         }
         #endregion
-
     }
 }
