@@ -12,7 +12,8 @@ namespace Realty
     {
         #region Поля
         private string method;
-        private string responseUrl;
+        private string responseUrl;        
+        private Dictionary<string, string> header = new Dictionary<string, string>();
         #endregion
 
         #region Конструкторы
@@ -91,7 +92,7 @@ namespace Realty
         /// <summary>
         /// Словарь заголовоков запроса (headers)
         /// </summary>
-        public Dictionary<string, string> Header { get; }
+        public Dictionary<string, string> Header { get => header; }
         /// <summary>
         /// Используемый UserAgent
         /// </summary>
@@ -114,7 +115,7 @@ namespace Realty
         /// <param name="Value">Значение</param>
         public void AddHeader(string Key, string Value)
         {
-            Header.Add(Key, Value);
+            header.Add(Key, Value);
         }
 
         /// <summary>
@@ -134,14 +135,11 @@ namespace Realty
                 WebProxy webProxy = new WebProxy(myProxy.ProxyString, myProxy.ProxyPort);
                 req.Proxy = webProxy;
             }
-
-            if (Header != null)
+                        
+            foreach (KeyValuePair<string, string> kvp in header)
             {
-                foreach (KeyValuePair<string, string> kvp in Header)
-                {
-                    req.Headers.Add(kvp.Key, kvp.Value);
-                }
-            }
+                req.Headers.Add(kvp.Key, kvp.Value);
+            }            
 
             if (Request != "")
             {

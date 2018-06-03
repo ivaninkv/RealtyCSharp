@@ -33,13 +33,23 @@ namespace Realty
                     string.Format($"Аргумент {nameof(searchUrl)} не может быть пустым."));
             }
             SearchUrl = searchUrl;
-            siteUrl = new Uri(SearchUrl).Host;
+            siteUrl = new Uri(SearchUrl).Host;            
 
             dt.Columns.Add("Floor", typeof(String));
             dt.Columns.Add("Link", typeof(String));
             dt.Columns.Add("Area", typeof(String));
             dt.Columns.Add("Address", typeof(String));
             dt.Columns.Add("Price", typeof(String));
+        }
+
+        /// <summary>
+        /// Конструктор, в качестве параметра принимает поисковую строку и флаг использования прокси
+        /// </summary>
+        /// <param name="searchUrl">Поисковый запрос, который нужно распарсить.</param>
+        /// <param name="useProxy">Использовать ли прокси.</param>
+        public Parser(string searchUrl, bool useProxy) : this(searchUrl)
+        {
+            UseProxy = useProxy;
         }
         #endregion
 
@@ -48,6 +58,10 @@ namespace Realty
         /// Поисковая строка
         /// </summary>
         public string SearchUrl { get; set; }
+        /// <summary>
+        /// Использовать прокси
+        /// </summary>
+        public bool UseProxy { get; set; }
         /// <summary>
         /// Задержка между запросами к сайту
         /// </summary>
@@ -88,7 +102,7 @@ namespace Realty
             {
                 Console.WriteLine($"Page - {pagenum}");
 
-                CustomRequest customRequest = new CustomRequest(SearchUrl + $"&p={pagenum}", "", "GET", "", "") { UseProxy = false };
+                CustomRequest customRequest = new CustomRequest(SearchUrl + $"&p={pagenum}", "", "GET", "", "") { UseProxy = UseProxy };
                 string htmlPage = customRequest.SendRequest();
                 if (SearchUrl + $"&p={pagenum}" == customRequest.ResponseUrl) { FillDT(htmlPage); }
                 else { break; }

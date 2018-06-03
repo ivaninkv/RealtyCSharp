@@ -14,7 +14,8 @@ namespace Realty
         /// </summary>
         /// <param name="searchUrl">Поисковый запрос, который нужно распарсить.</param>
         /// <param name="delay_s">Задержка между запросами, с.</param>
-        public Avito(string searchUrl, int delay_s = 3) : base(searchUrl)
+        /// <param name="useProxy">Испмользовать ли прокси.</param>
+        public Avito(string searchUrl, int delay_s = 3, bool useProxy = false) : base(searchUrl, useProxy)
         {
             if (SearchUrl.IndexOf('?') == -1)
                 SearchUrl += "?view=list";
@@ -39,13 +40,14 @@ namespace Realty
         {
             var dt = new DataTable();
             dt = base.Parse();
-            dt.Columns.Add("FloorAll");
+            dt.Columns.Add("Floor_All");
+            
             foreach (DataRow row in dt.Rows)
             {
                 row["Area"] = row["Area"].ToString().Replace("м²", String.Empty).Replace(".", ",").Trim();
                 row["Price"] = row["Price"].ToString().Replace("р. в месяц", String.Empty).Replace(".", ",").Trim();
                 row["Floor"] = row["Floor"].ToString().Replace(" эт.", String.Empty).Trim();
-                row["FloorAll"] = row["Floor"].ToString().Split('/')[1];
+                row["Floor_All"] = row["Floor"].ToString().Split('/')[1];
                 row["Floor"] = row["Floor"].ToString().Split('/')[0];
 
             }
@@ -53,11 +55,16 @@ namespace Realty
             dt.ChangeColumnDataType("Area", typeof(decimal));
             dt.ChangeColumnDataType("Price", typeof(decimal));
             dt.ChangeColumnDataType("Floor", typeof(int));
-            dt.ChangeColumnDataType("FloorAll", typeof(int));
+            dt.ChangeColumnDataType("Floor_All", typeof(int));
+
+            dt.Columns.Add("Price_by_meter");
+            foreach (DataRow row in dt.Rows)
+            {
+                row["Price_by_meter"] = (decimal)row["Price"] / (decimal)row["Area"];
+            }
 
             return dt;
         }
         #endregion
-
     }
 }

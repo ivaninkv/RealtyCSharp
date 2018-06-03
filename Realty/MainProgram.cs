@@ -14,7 +14,9 @@ namespace Realty
             addrSuggestion.GetAddrSuggestion("г. Ступино, тургенева", 1);
             Console.WriteLine(addrSuggestion.City);
             Console.WriteLine(addrSuggestion.Street);
-            */
+            Console.ReadKey();
+            return 0;
+            //*/
 
             Console.WriteLine("Введите url для парсинга:");
             string url = Console.ReadLine();
