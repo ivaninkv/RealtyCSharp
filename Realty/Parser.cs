@@ -142,8 +142,8 @@ namespace Realty
                 dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim().RemoveIncorrectChars(),
                                             siteUrl + Regex.Match(link_sel[i].OuterHtml, @"<a.*?href=(""|')(?<href>.*?)(""|').*?>(?<value>.*?)</a>",RegexOptions.IgnoreCase).Groups["href"].Value,
                                             area_sel[i].TextContent.Trim().RemoveIncorrectChars(),
-                                            address_sel.Length > 0 ? address_sel[i].TextContent.Trim().RemoveIncorrectChars() : "",
-                                            city_sel.Length > 0 ? city_sel?[i].TextContent?.Trim()?.RemoveIncorrectChars() : "",
+                                            address_sel.Length > 0 ? address_sel[i].TextContent.Trim().RemoveIncorrectChars() : "-",
+                                            city_sel.Length > 0 ? city_sel?[i].TextContent?.Trim()?.RemoveIncorrectChars() : "-",
                                             price_sel[i].TextContent.Trim().RemoveIncorrectChars() });
             }
         }
