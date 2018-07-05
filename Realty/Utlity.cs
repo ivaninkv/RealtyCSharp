@@ -62,33 +62,33 @@ namespace Realty
         /// Меняет тип столбца в DataTable
         /// </summary>
         /// <param name="table">DataTable, в котором нужно изменить тип столбца</param>
-        /// <param name="columnname">Название столбца</param>
-        /// <param name="newtype">Новый тип столбца</param>        
-        public static void ChangeColumnDataType(this DataTable table, string columnname, Type newtype)
+        /// <param name="columnName">Название столбца</param>
+        /// <param name="newType">Новый тип столбца</param>        
+        public static void ChangeColumnDataType(this DataTable table, string columnName, Type newType)
         {
-            if (table.Columns.Contains(columnname) == false)
+            if (table.Columns.Contains(columnName) == false)
                 return;
 
-            DataColumn column = table.Columns[columnname];
-            if (column.DataType == newtype)
+            DataColumn column = table.Columns[columnName];
+            if (column.DataType == newType)
                 return;
 
             try
             {
-                DataColumn newcolumn = new DataColumn("temporary", newtype);
+                DataColumn newcolumn = new DataColumn("temporary", newType);
                 table.Columns.Add(newcolumn);
                 foreach (DataRow row in table.Rows)
                 {
                     try
                     {
-                        row["temporary"] = Convert.ChangeType(row[columnname], newtype);
+                        row["temporary"] = Convert.ChangeType(row[columnName], newType);
                     }
                     catch
                     {
                     }
                 }
-                table.Columns.Remove(columnname);
-                newcolumn.ColumnName = columnname;
+                table.Columns.Remove(columnName);
+                newcolumn.ColumnName = columnName;
             }
             catch (Exception)
             {
@@ -106,6 +106,30 @@ namespace Realty
         public static string RemoveIncorrectChars(this string str)
         {
             return Regex.Replace(str, @"\s+", " ");
+        }
+        
+        /// <summary>
+        /// Группирует DataTable по указанному столбцу, применяя агрегирующую функцию для другого столбца
+        /// </summary>
+        /// <param name="table">Исходный DataTable</param>
+        /// <param name="groupColumn">Название столбца для группировки</param>
+        /// <param name="calcColumn">Название столбца для вычисления</param>
+        /// <param name="func">Агрегатная функция</param>
+        /// <returns>Сгруппированный DataTable</returns>
+        public static DataTable GropupBy(this DataTable table, string groupColumn, string calcColumn, string func = "AVG")
+        {
+            DataView dv = table.DefaultView;
+            dv.Sort = groupColumn;            
+            DataTable result_dt = dv.ToTable(true, groupColumn);
+            result_dt.Columns.Add("CalcValue", typeof(decimal));
+
+            foreach (DataRow dr in result_dt.Rows)
+            {
+                var avg = table.Compute($"{func}({calcColumn})", $"{groupColumn}={dr[groupColumn]}");                
+                dr["CalcValue"] = (decimal)avg;                
+            }
+            
+            return result_dt;
         }
         #endregion
     }

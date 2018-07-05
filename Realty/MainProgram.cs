@@ -25,21 +25,23 @@ namespace Realty
             Console.WriteLine("1 - простой парсинг.");
             Console.WriteLine("2 - анализ цен.");
 
-            int choise = 0;
+            var choise = new Const.WorkType();
 
             while (true)
             {
                 if (int.TryParse(Console.ReadLine(), out int input))
-                    choise = input;
-                if (new int[] { 0, 1, 2 }.Contains(choise))
-                    break;
+                {
+                    choise = (Const.WorkType)input;
+                    if (new int[] { 0, 1, 2 }.Contains(input))
+                        break;
+                }
                 else
                     Console.WriteLine("Некорректный ввод.");
-            }
-
+            }            
+            
             switch (choise)
             {
-                case 1:
+                case Const.WorkType.Parse:
                     Console.WriteLine("Введите url для парсинга:");
                     string url = Console.ReadLine();
                     string host = new Uri(url).Host;
@@ -49,23 +51,15 @@ namespace Realty
                         var dt = site.Parse();
                         Console.WriteLine($"Распарсено {dt.Rows.Count} объявлений.");
                         dt.ToCSV("avito.csv");
-
-                        
+                        var grdt = dt.GropupBy("Floor", "Price_by_meter");
+                        grdt.ToCSV("avito_gr.csv");
                     }
                     else
                         Console.WriteLine($"Не найден обработчик для сайта {host}.");
                     break;
 
-                case 2:
-                    //var result = from row in dt.AsEnumerable()
-                    //             group row by row.Field<int>("Floor_All") into grp
-                    //             select new
-                    //             {
-                    //                 Floor_All = grp.Key,
-                    //                 MemberCount = grp.Count()
-                    //             };
-                    //foreach (var t in result)
-                    //    Console.WriteLine(t.Floor_All + " " + t.MemberCount);
+                case Const.WorkType.Analyse:
+                    
                     break;
 
                 default:

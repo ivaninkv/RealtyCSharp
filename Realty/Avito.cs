@@ -57,7 +57,7 @@ namespace Realty
             dt.ChangeColumnDataType("Floor", typeof(int));
             dt.ChangeColumnDataType("Floor_All", typeof(int));
 
-            dt.Columns.Add("Price_by_meter");
+            dt.Columns.Add("Price_by_meter", typeof(decimal));
             foreach (DataRow row in dt.Rows)
             {
                 row["Price_by_meter"] = (decimal)row["Price"] / (decimal)row["Area"];

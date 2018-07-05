@@ -14,7 +14,7 @@ namespace Realty
         internal const string DadataToken = "dba3afebfa4352ef55d908aed30f87780a46949e";
         internal const string DadataAddrUrl = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
         internal const string DadataAddrQuery = "<req><query>{0}</query><count>{1}</count></req>";
-
+        internal enum WorkType { Exit, Parse, Analyse };
 
         /// <summary>
         /// Получение рандомного useragent'а

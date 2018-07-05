@@ -107,9 +107,7 @@ namespace Realty
                 if (SearchUrl + $"&p={pagenum}" == customRequest.ResponseUrl) { FillDT(htmlPage); }
                 else { break; }
                 if (Delay_s > 0) { Thread.Sleep(Delay_s * 1000); }
-                pagenum += 1;
-
-                //break; // test
+                pagenum += 1;                
             }
 
             return dt;
