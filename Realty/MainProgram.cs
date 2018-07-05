@@ -51,7 +51,7 @@ namespace Realty
                         var dt = site.Parse();
                         Console.WriteLine($"Распарсено {dt.Rows.Count} объявлений.");
                         dt.ToCSV("avito.csv");
-                        var grdt = dt.GropupBy("Floor", "Price_by_meter");
+                        var grdt = dt.GropupBy("City", "Price_by_meter");
                         grdt.ToCSV("avito_gr.csv");
                     }
                     else

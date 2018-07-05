@@ -27,6 +27,7 @@ namespace Realty
             Link = ".description-title-link";
             Area = ".area";
             Address = ".address";
+            City = ".data-chunk";
             Price = ".price";
         }
         #endregion

@@ -33,12 +33,13 @@ namespace Realty
                     string.Format($"Аргумент {nameof(searchUrl)} не может быть пустым."));
             }
             SearchUrl = searchUrl;
-            siteUrl = new Uri(SearchUrl).Host;            
+            siteUrl = new Uri(SearchUrl).Host;
 
             dt.Columns.Add("Floor", typeof(String));
             dt.Columns.Add("Link", typeof(String));
             dt.Columns.Add("Area", typeof(String));
             dt.Columns.Add("Address", typeof(String));
+            dt.Columns.Add("City", typeof(String));
             dt.Columns.Add("Price", typeof(String));
         }
 
@@ -83,6 +84,10 @@ namespace Realty
         /// </summary>
         public string Address { get; set; }
         /// <summary>
+        /// Город объявления
+        /// </summary>
+        public string City { get; set; }
+        /// <summary>
         /// Цена квартиры
         /// </summary>
         public string Price { get; set; }
@@ -107,7 +112,7 @@ namespace Realty
                 if (SearchUrl + $"&p={pagenum}" == customRequest.ResponseUrl) { FillDT(htmlPage); }
                 else { break; }
                 if (Delay_s > 0) { Thread.Sleep(Delay_s * 1000); }
-                pagenum += 1;                
+                pagenum += 1;
             }
 
             return dt;
@@ -118,18 +123,27 @@ namespace Realty
             HtmlParser parser = new HtmlParser();
             var page = parser.Parse(htmlPage);
 
-            var floor_sel = page.QuerySelectorAll(Floor);
-            var link_sel = page.QuerySelectorAll(Link);
-            var area_sel = page.QuerySelectorAll(Area);
-            var address_sel = page.QuerySelectorAll(Address);
-            var price_sel = page.QuerySelectorAll(Price);
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> floor_sel = null;
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> link_sel = null;
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> area_sel = null;
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> address_sel = null;
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> city_sel = null;
+            AngleSharp.Dom.IHtmlCollection<AngleSharp.Dom.IElement> price_sel = null;
+
+            try { floor_sel = page.QuerySelectorAll(Floor); } catch { };
+            try { link_sel = page.QuerySelectorAll(Link); } catch { };
+            try { area_sel = page.QuerySelectorAll(Area); } catch { };
+            try { address_sel = page.QuerySelectorAll(Address); } catch { };
+            try { city_sel = page.QuerySelectorAll(City); } catch { };
+            try { price_sel = page.QuerySelectorAll(Price); } catch { };
 
             for (int i = 0; i < floor_sel.Length; i++)
             {
                 dt.Rows.Add(new String[] { floor_sel[i].TextContent.Trim().RemoveIncorrectChars(),
                                             siteUrl + Regex.Match(link_sel[i].OuterHtml, @"<a.*?href=(""|')(?<href>.*?)(""|').*?>(?<value>.*?)</a>",RegexOptions.IgnoreCase).Groups["href"].Value,
                                             area_sel[i].TextContent.Trim().RemoveIncorrectChars(),
-                                            address_sel[i].TextContent.Trim().RemoveIncorrectChars(),
+                                            address_sel.Length > 0 ? address_sel[i].TextContent.Trim().RemoveIncorrectChars() : "",
+                                            city_sel.Length > 0 ? city_sel?[i].TextContent?.Trim()?.RemoveIncorrectChars() : "",
                                             price_sel[i].TextContent.Trim().RemoveIncorrectChars() });
             }
         }
