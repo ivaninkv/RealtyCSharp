@@ -42,7 +42,7 @@ namespace Realty
             var dt = new DataTable();
             dt = base.Parse();
             dt.Columns.Add("Floor_All");
-            
+
             foreach (DataRow row in dt.Rows)
             {
                 row["Area"] = row["Area"].ToString().Replace("м²", String.Empty).Replace(".", ",").Trim();
@@ -51,6 +51,8 @@ namespace Realty
                 row["Floor_All"] = row["Floor"].ToString().Split('/')[1];
                 row["Floor"] = row["Floor"].ToString().Split('/')[0];
 
+                try { var tmp = Convert.ChangeType(row["Price"], typeof(decimal)); }
+                catch { row["Price"] = "0"; }
             }
 
             dt.ChangeColumnDataType("Area", typeof(decimal));
@@ -60,7 +62,7 @@ namespace Realty
 
             dt.Columns.Add("Price_by_meter", typeof(decimal));
             foreach (DataRow row in dt.Rows)
-            {
+            {                
                 row["Price_by_meter"] = (decimal)row["Price"] / (decimal)row["Area"];
             }
 

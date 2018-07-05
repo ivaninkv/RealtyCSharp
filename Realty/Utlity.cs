@@ -126,8 +126,8 @@ namespace Realty
             foreach (DataRow dr in result_dt.Rows)
             {
                 if (dr[groupColumn].ToString() != "")
-                {
-                    var avg = table.Compute($"{func}({calcColumn})", $"{groupColumn}={dr[groupColumn]}");
+                {                    
+                    var avg = table.Compute($"{func}({calcColumn})", $"{groupColumn}='{dr[groupColumn]}'");
                     dr["CalcValue"] = (decimal)avg;
                 }                
             }
